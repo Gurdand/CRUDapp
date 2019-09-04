@@ -13,10 +13,6 @@ import java.util.Properties;
 
 public class DBConnection {
 
-    public DBConnection() {
-
-    }
-
     public Connection getConnection() {
 
             Properties properties = new Properties();
@@ -26,17 +22,17 @@ public class DBConnection {
         assert res != null;
 
         try (InputStream in = Files.newInputStream(Paths.get(res.toURI()))) {
-                properties.load(in);
+            properties.load(in);
 
-                DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance());
+            DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance());
 
-                return DriverManager.getConnection(properties.getProperty("url"),
-                        properties.getProperty("login"), properties.getProperty("password"));
+            return DriverManager.getConnection(properties.getProperty("url"),
+                    properties.getProperty("login"), properties.getProperty("password"));
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
     }
 }

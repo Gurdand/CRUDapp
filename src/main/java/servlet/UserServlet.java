@@ -9,16 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/users/*")
 public class UserServlet extends HttpServlet {
 
+    private String message = null;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=utf-8");
         resp.setCharacterEncoding("UTF-8");
+
+        req.setAttribute("message", message);
 
         try {
             List<User> users = new UserService().getAllUsers();
@@ -47,40 +52,45 @@ public class UserServlet extends HttpServlet {
 
         if (req.getPathInfo().contains("add")) {
 
-            String message = "Ошибка! Юзер не добавлен!";
+            //String message = "Ошибка! Юзер не добавлен!";
 
             try {
                 User user = new User();
-                user.setName(req.getParameter("name"));
+                user.setName(new String(req.getParameter("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
+
+                System.out.println(req.getParameter("name"));
+
                 user.setAge(Integer.parseInt(req.getParameter("age")));
 
                 if (new UserService().createUser(user)) {
+                    //message = "Новый юзер " + user.getName() + " добавлен!";
                     message = "Новый юзер " + user.getName() + " добавлен!";
 
                     resp.setStatus(200);
                 }
 
             } catch (Exception e) {
+                message = "Ошибка! Юзер не добавлен!";
                 resp.setStatus(400);
             }
 
-            req.setAttribute("message", message);
-
-            doGet(req,resp);
+            resp.sendRedirect("/users");
         }
 
 
         if (req.getPathInfo().contains("delete")) {
 
             if (new UserService().deleteUserById(Integer.parseInt(req.getParameter("id")))) {
-                req.setAttribute("message", "Запись удалена!");
+                //req.setAttribute("message", "Запись удалена!");
+                message = "Запись удалена!";
                 resp.setStatus(200);
             } else {
-                req.setAttribute("message", "Ошибка!");
+                //req.setAttribute("message", "Ошибка!");
+                message = "Ошибка!";
                 resp.setStatus(400);
             }
 
-            doGet(req,resp);
+            resp.sendRedirect("/users");
         }
 
 
@@ -88,20 +98,25 @@ public class UserServlet extends HttpServlet {
 
             try {
                 User user = new User(Integer.parseInt(req.getParameter("id")),
-                        req.getParameter("name"),
+                        new String(req.getParameter("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8) ,
                         Integer.parseInt(req.getParameter("age")));
 
+                System.out.println(req.getParameter("name"));
+
                 if (new UserService().updateUser(user)) {
-                    req.setAttribute("message", "Данные обнвлены!");
+                    //req.setAttribute("message", "Данные обнвлены!");
+                    message = "Данные обнвлены!";
                     resp.setStatus(200);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                req.setAttribute("message", "Ошибка! Невозможно обновить данные!");
+                //req.setAttribute("message", "Ошибка! Невозможно обновить данные!");
+                message = "Ошибка! Невозможно обновить данные!";
                 resp.setStatus(400);
             }
 
-            doGet(req,resp);
+            resp.sendRedirect("/users");
+
         }
 
 

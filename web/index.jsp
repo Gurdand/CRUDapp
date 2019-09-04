@@ -8,13 +8,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title>$Title$</title>
+    <title>User Manager</title>
   </head>
   <body>
     <header>
       <h1>User Manager</h1>
-      <a href="/users">Menage users</a>
+      <a href="/users">Menage user list</a>
     </header>
-  $END$
   </body>
 </html>

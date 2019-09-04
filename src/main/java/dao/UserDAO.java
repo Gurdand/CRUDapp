@@ -47,7 +47,7 @@ public class UserDAO {
         PreparedStatement statement = connection.prepareStatement(
                 "UPDATE user_test.users SET name = ? , age = ? WHERE id = ?"
         );
-        statement.setString(1, user.getName());
+        statement.setNString(1, user.getName());
         statement.setInt(2, user.getAge());
         statement.setInt(3, user.getId());
         statement.executeUpdate();
