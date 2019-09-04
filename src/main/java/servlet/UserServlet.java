@@ -18,6 +18,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=utf-8");
+        resp.setCharacterEncoding("UTF-8");
 
         try {
             List<User> users = new UserService().getAllUsers();
@@ -39,6 +40,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=utf-8");
+        resp.setCharacterEncoding("UTF-8");
 
         if (req.getPathInfo().contains("add")) {
 
@@ -66,6 +68,14 @@ public class UserServlet extends HttpServlet {
 
         if (req.getPathInfo().contains("delete")) {
             req.setAttribute("message", req.getParameter("id"));
+
+            if (new UserService().deleteUserById(Integer.parseInt(req.getParameter("id")))) {
+                req.setAttribute("message", "Запись удалена!");
+                resp.setStatus(200);
+            } else {
+                req.setAttribute("message", "Ошибка!");
+                resp.setStatus(400);
+            }
 
             doGet(req,resp);
         }

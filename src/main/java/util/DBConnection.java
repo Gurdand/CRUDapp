@@ -11,14 +11,11 @@ import java.util.Properties;
 
 public class DBConnection {
 
-    private static Connection connection;
-
     private DBConnection() {
 
     }
 
     public static Connection getConnection() {
-        if (connection == null) {
 
             //Properties properties = new Properties();
 
@@ -41,22 +38,19 @@ public class DBConnection {
                         append("localhost:").           //host name
                         append("3306/").                //port
                         append("user_db?").          //db name
-                        append("serverTimezone=Europe/Moscow&useSSL=false&useUnicode=yes&characterEncoding=utf8&").
+                        append("serverTimezone=Europe/Moscow&useSSL=false&").
                         append("user=root&").          //login
                         append("password=12345");       //password
-
-                System.out.println("URL: " + url + "\n");
 
 //                connection = DriverManager.getConnection(properties.getProperty("url"),
 //                        properties.getProperty("login"), properties.getProperty("password"));
 
-                connection = DriverManager.getConnection(url.toString());
+                return DriverManager.getConnection(url.toString());
 
             } catch (Exception e) {
                 e.printStackTrace();
+                throw new IllegalStateException("DB connection Error! Ошибка подключения!");
             }
 
-        }
-        return connection;
     }
 }

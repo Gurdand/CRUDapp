@@ -46,7 +46,11 @@ public class UserDAO {
 
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(int id) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "DELETE FROM user_test.users WHERE id = '" + id + "'";
+        statement.execute(query);
+        statement.close();
 
     }
 
