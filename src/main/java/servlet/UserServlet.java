@@ -22,6 +22,11 @@ public class UserServlet extends HttpServlet {
 
         try {
             List<User> users = new UserService().getAllUsers();
+
+            if (users == null) {
+                throw new SQLException();
+            }
+
             req.setAttribute("users", users);
             resp.setStatus(200);
 
@@ -29,9 +34,6 @@ public class UserServlet extends HttpServlet {
             req.setAttribute("message", "Упс! Что то пошло не так! =(");
             resp.setStatus(400);
         }
-//        users.add(new User(1, "Bill", 28));
-//        users.add(new User(2, "John", 35));
-//        users.add(new User(3, "Elly", 23));
 
         getServletContext().getRequestDispatcher("/templates/users.jsp").forward(req,resp);
     }
@@ -41,6 +43,7 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=utf-8");
         resp.setCharacterEncoding("UTF-8");
+
 
         if (req.getPathInfo().contains("add")) {
 
@@ -66,8 +69,8 @@ public class UserServlet extends HttpServlet {
             doGet(req,resp);
         }
 
+
         if (req.getPathInfo().contains("delete")) {
-            req.setAttribute("message", req.getParameter("id"));
 
             if (new UserService().deleteUserById(Integer.parseInt(req.getParameter("id")))) {
                 req.setAttribute("message", "Запись удалена!");
@@ -80,8 +83,25 @@ public class UserServlet extends HttpServlet {
             doGet(req,resp);
         }
 
+
         if (req.getPathInfo().contains("update")) {
 
+            try {
+                User user = new User(Integer.parseInt(req.getParameter("id")),
+                        req.getParameter("name"),
+                        Integer.parseInt(req.getParameter("age")));
+
+                if (new UserService().updateUser(user)) {
+                    req.setAttribute("message", "Данные обнвлены!");
+                    resp.setStatus(200);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                req.setAttribute("message", "Ошибка! Невозможно обновить данные!");
+                resp.setStatus(400);
+            }
+
+            doGet(req,resp);
         }
 
 

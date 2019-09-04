@@ -16,7 +16,7 @@
 <body>
     <section>
         <h2>Create new user</h2>
-        <form method="post" action="/users/add">
+        <form method="post" action="users/add">
             <input name="name" placeholder="Name" >
             <input type="number" name="age" placeholder="Age">
             <button type="submit">Create</button>
@@ -28,19 +28,31 @@
     </section>
 
     <section>
+        <h2>Update user</h2>
+        <form method="post" action="users/update">
+            <input type="number" name="id" placeholder="ID">
+            <input name="name" placeholder="New name">
+            <input type="number" name="age" placeholder="New age">
+            <button type="submit">Update</button>
+        </form>
+    </section>
+
+    <section>
         <h2>All users</h2>
         <table border="1">
             <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Age</th>
             </tr>
             <%--@elvariable id="users" type="java.util.List"--%>
             <c:forEach var="user" items="${users}">
                 <tr>
+                    <td>${user.id}</td>
                     <td>${user.name}</td>
                     <td>${user.age}</td>
                     <td>
-                        <form method="post" action="/users/delete">
+                        <form method="post" action="users/delete">
                             <button type="submit" name="id" value="${user.id}" >Delete</button>
                         </form>
                     </td>

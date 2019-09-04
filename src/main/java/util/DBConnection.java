@@ -1,6 +1,8 @@
 package util;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,45 +13,29 @@ import java.util.Properties;
 
 public class DBConnection {
 
-    private DBConnection() {
+    public DBConnection() {
 
     }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
 
-            //Properties properties = new Properties();
+            Properties properties = new Properties();
+            URL res = getClass().getClassLoader().getResource("db.properties");
 
-            try{
-                //(InputStream in = Files.newInputStream(Paths.get("resources","db.properties")))
-                //properties.load(in);
+// Совет idea для метода toURI
+        assert res != null;
 
-                DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance());
+        try (InputStream in = Files.newInputStream(Paths.get(res.toURI()))) {
+                properties.load(in);
 
-                //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+                DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance());
 
-//                String url = "jdbc:mysql://localhost:3306/user_db?serverTimezone=Europe/Moscow&useSSL=false";
-//                String userName = "root";
-//                String password = "12345";
-
-                StringBuilder url = new StringBuilder();
-
-                url.
-                        append("jdbc:mysql://").        //db type
-                        append("localhost:").           //host name
-                        append("3306/").                //port
-                        append("user_db?").          //db name
-                        append("serverTimezone=Europe/Moscow&useSSL=false&").
-                        append("user=root&").          //login
-                        append("password=12345");       //password
-
-//                connection = DriverManager.getConnection(properties.getProperty("url"),
-//                        properties.getProperty("login"), properties.getProperty("password"));
-
-                return DriverManager.getConnection(url.toString());
+                return DriverManager.getConnection(properties.getProperty("url"),
+                        properties.getProperty("login"), properties.getProperty("password"));
 
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new IllegalStateException("DB connection Error! Ошибка подключения!");
+                return null;
             }
 
     }

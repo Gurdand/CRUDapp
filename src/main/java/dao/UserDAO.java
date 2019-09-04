@@ -24,32 +24,38 @@ public class UserDAO {
 
     }
 
-    public User getUser(int id) {
-        return null;
-    }
-
-    public List<User> getAllUsers() throws SQLException {
-        Statement statement = connection.createStatement();
-        statement.execute("SELECT * FROM user_test.users");
-        ResultSet resultSet = statement.getResultSet();
-        List<User> userList = new ArrayList<>();
-        while (resultSet.next()) {
-            userList.add(new User(resultSet.getInt("id"),resultSet.getString("name"),
-                    resultSet.getInt("age")));
+    public List<User> getAllUsers() {
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute("SELECT * FROM user_test.users");
+            ResultSet resultSet = statement.getResultSet();
+            List<User> userList = new ArrayList<>();
+            while (resultSet.next()) {
+                userList.add(new User(resultSet.getInt("id"), resultSet.getString("name"),
+                        resultSet.getInt("age")));
+            }
+            resultSet.close();
+            statement.close();
+            return userList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        resultSet.close();
-        statement.close();
-        return userList;
     }
 
-    public void updateUser(User user) {
-
+    public void updateUser(User user) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "UPDATE user_test.users SET name = ? , age = ? WHERE id = ?"
+        );
+        statement.setString(1, user.getName());
+        statement.setInt(2, user.getAge());
+        statement.setInt(3, user.getId());
+        statement.executeUpdate();
     }
 
     public void deleteUser(int id) throws SQLException {
         Statement statement = connection.createStatement();
-        String query = "DELETE FROM user_test.users WHERE id = '" + id + "'";
-        statement.execute(query);
+        statement.execute("DELETE FROM user_test.users WHERE id = '" + id + "'");
         statement.close();
 
     }
