@@ -11,6 +11,10 @@
     <title>$Title$</title>
   </head>
   <body>
+    <header>
+      <h1>User Manager</h1>
+      <a href="/users">Menage users</a>
+    </header>
   $END$
   </body>
 </html>
