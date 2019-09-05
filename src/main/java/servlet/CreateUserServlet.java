@@ -21,14 +21,14 @@ public class CreateUserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html;charset=utf-8");
+        req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
         String message = "Ошибка! Юзер не добавлен!";
 
         try {
             User user = new User();
-            user.setName(new String(req.getParameter("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
+            user.setName(req.getParameter("name"));
             user.setAge(Integer.parseInt(req.getParameter("age")));
 
             if (new UserService().createUser(user)) {
