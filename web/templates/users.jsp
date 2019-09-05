@@ -18,7 +18,7 @@
 <body>
     <section>
         <h2>Create new user</h2>
-        <form method="post" action="users/add">
+        <form method="post" action="/users/create">
             <input name="name" placeholder="Name" >
             <input type="number" name="age" placeholder="Age">
             <button type="submit">Create</button>
@@ -26,14 +26,13 @@
     </section>
 
     <section>
-        <p><%--@elvariable id="message" type="java"--%>
-        <c:out value="${message}"/></p>
+        <p><c:out value="${message}"/></p>
         <a href="/">На главную</a>
     </section>
 
     <section>
         <h2>Update user</h2>
-        <form method="post" action="users/update">
+        <form method="post" action="/users/update">
             <input type="number" name="id" placeholder="ID">
             <input name="name" placeholder="New name">
             <input type="number" name="age" placeholder="New age">
@@ -56,7 +55,7 @@
                     <td>${user.name}</td>
                     <td>${user.age}</td>
                     <td>
-                        <form method="post" action="users/delete">
+                        <form method="post" action="/users/delete">
                             <button type="submit" name="id" value="${user.id}" >Delete</button>
                         </form>
                     </td>
