@@ -51,6 +51,7 @@ public class UserDAO {
         statement.setInt(2, user.getAge());
         statement.setInt(3, user.getId());
         statement.executeUpdate();
+        statement.close();
     }
 
     public void deleteUser(int id) throws SQLException {
