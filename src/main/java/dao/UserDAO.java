@@ -1,64 +1,46 @@
 package dao;
 
 import model.User;
-
-import java.sql.*;
-import java.util.ArrayList;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import java.util.List;
 
 public class UserDAO {
 
-    private Connection connection;
+    private Session session;
 
-    public UserDAO(Connection connection) {
-        this.connection = connection;
+    public UserDAO(Session session) {
+        this.session = session;
     }
 
-    public void createUser(User user) throws SQLException {
-        String sql = "INSERT INTO user_test.users (name, age) Values (?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, user.getName());
-        statement.setInt(2, user.getAge());
-        statement.execute();
-        statement.close();
-
+    public void createUser(User user) {
+        Transaction transaction = session.beginTransaction();
+        session.save(user);
+        transaction.commit();
+        session.close();
     }
 
     public List<User> getAllUsers() {
-        try {
-            Statement statement = connection.createStatement();
-            statement.execute("SELECT * FROM user_test.users");
-            ResultSet resultSet = statement.getResultSet();
-            List<User> userList = new ArrayList<>();
-            while (resultSet.next()) {
-                userList.add(new User(resultSet.getInt("id"), resultSet.getString("name"),
-                        resultSet.getInt("age")));
-            }
-            resultSet.close();
-            statement.close();
-            return userList;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        Transaction transaction = session.beginTransaction();
+        List<User> users = session.createQuery("FROM User").list();
+        transaction.commit();
+        session.close();
+        return users;
     }
 
-    public void updateUser(User user) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "UPDATE user_test.users SET name = ? , age = ? WHERE id = ?"
-        );
-        statement.setNString(1, user.getName());
-        statement.setInt(2, user.getAge());
-        statement.setInt(3, user.getId());
-        statement.executeUpdate();
-        statement.close();
+    public void updateUser(User user) {
+        Transaction transaction = session.beginTransaction();
+        session.update(user);
+        transaction.commit();
+        session.close();
     }
 
-    public void deleteUser(int id) throws SQLException {
-        Statement statement = connection.createStatement();
-        statement.execute("DELETE FROM user_test.users WHERE id = '" + id + "'");
-        statement.close();
-
+    public void deleteUser(int id) {
+        Transaction transaction = session.beginTransaction();
+        session.createQuery("DELETE FROM User WHERE id = :id")
+                .setParameter("id", id).executeUpdate();
+        transaction.commit();
+        session.close();
     }
 
 

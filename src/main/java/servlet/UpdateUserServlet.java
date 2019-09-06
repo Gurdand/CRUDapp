@@ -23,12 +23,12 @@ public class UpdateUserServlet extends HttpServlet {
                     req.getParameter("name"),
                     Integer.parseInt(req.getParameter("age")));
 
-            System.out.println(req.getParameter("name"));
-
             if (new UserService().updateUser(user)) {
                 req.setAttribute("message", "Данные обновлены!");
                 resp.setStatus(200);
             }
+
+            req.setAttribute("message", "Ошибка! Невозможно обновить данные!");
 
         } catch (Exception e) {
             e.printStackTrace();

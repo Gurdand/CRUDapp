@@ -39,7 +39,7 @@ public class UserServlet extends HttpServlet {
             req.setAttribute("users", users);
             resp.setStatus(200);
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             req.setAttribute("message", "Упс! Что то пошло не так! =(");
             resp.setStatus(400);
         }

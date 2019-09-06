@@ -2,19 +2,15 @@ package service;
 
 import dao.UserDAO;
 import model.User;
-import util.DBConnection;
+import util.HibernateSessionFactory;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
 
-    public UserService() {
-    }
-
     public boolean createUser(User user) {
         try {
-            new UserDAO(new DBConnection().getConnection()).createUser(user);
+            new UserDAO(HibernateSessionFactory.getSession()).createUser(user);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -22,13 +18,18 @@ public class UserService {
         }
     }
 
-    public List<User> getAllUsers() throws SQLException {
-        return new UserDAO(new DBConnection().getConnection()).getAllUsers();
+    public List<User> getAllUsers() {
+        try {
+            return new UserDAO(HibernateSessionFactory.getSession()).getAllUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public boolean deleteUserById(int id) {
         try {
-            new UserDAO(new DBConnection().getConnection()).deleteUser(id);
+            new UserDAO(HibernateSessionFactory.getSession()).deleteUser(id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,9 +39,9 @@ public class UserService {
 
     public boolean updateUser(User user) {
         try {
-            new UserDAO(new DBConnection().getConnection()).updateUser(user);
+            new UserDAO(HibernateSessionFactory.getSession()).updateUser(user);
             return true;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
