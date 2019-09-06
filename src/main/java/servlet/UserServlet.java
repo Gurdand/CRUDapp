@@ -33,7 +33,7 @@ public class UserServlet extends HttpServlet {
             List<User> users = new UserService().getAllUsers();
 
             if (users == null) {
-                throw new SQLException();
+                throw new IllegalArgumentException("Ошибка! List<User> users = null");
             }
 
             req.setAttribute("users", users);
