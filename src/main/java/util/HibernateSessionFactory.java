@@ -28,13 +28,13 @@ public class HibernateSessionFactory {
             Configuration configuration = new Configuration();
             configuration.configure();
 
-            configuration.addAnnotatedClass(User.class);
+            //configuration.addAnnotatedClass(User.class);
             //configuration.setProperty("hibernate.connection.username", "root");
-            configuration.setProperty("hibernate.connection.username", properties.getProperty("login"));
+            //configuration.setProperty("hibernate.connection.username", properties.getProperty("login"));
             //configuration.setProperty("hibernate.connection.password", "12345");
-            configuration.setProperty("hibernate.connection.password", properties.getProperty("password"));
-            configuration.setProperty("hibernate.show_sql", "true");
-            configuration.setProperty("hibernate.hbm2ddl.auto", "validate");
+            //configuration.setProperty("hibernate.connection.password", properties.getProperty("password"));
+            //configuration.setProperty("hibernate.show_sql", "true");
+            //configuration.setProperty("hibernate.hbm2ddl.auto", "validate");
 
             ourSessionFactory = configuration.buildSessionFactory();
         } catch (Throwable ex) {

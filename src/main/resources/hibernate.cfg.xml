@@ -7,7 +7,13 @@
         <property name="connection.url">
             <![CDATA[jdbc:mysql://localhost:3306/user_test?serverTimezone=Europe/Moscow&allowPublicKeyRetrieval=true&useSSL=false]]></property>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">12345</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">validate</property>
+
         <mapping class="model.User"/>
+
 <!--        <property name="connection.username"/>-->
 <!--        <property name="connection.password"/>-->
 
