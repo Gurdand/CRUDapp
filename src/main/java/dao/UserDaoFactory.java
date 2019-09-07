@@ -15,7 +15,6 @@ public abstract class UserDaoFactory {
 
 
     static class JdbcUserDaoFactory extends UserDaoFactory {
-
         @Override
         public UserDAO getUserDAO() {
             return new UserDaoJDBCimpl(new DBHelper().getConnection());
@@ -24,11 +23,26 @@ public abstract class UserDaoFactory {
 
     static class HibernateUserDaoFactory extends UserDaoFactory {
 
-        private SessionFactory sessionFactory = new DBHelper().getConfiguration().buildSessionFactory();
+        private SessionFactory sessionFactory;
+
+        HibernateUserDaoFactory() {
+            try{
+                sessionFactory = new DBHelper().getConfiguration().buildSessionFactory();
+            } catch (Exception e) {
+                e.printStackTrace();
+                sessionFactory = null;
+            }
+        }
 
         @Override
         public UserDAO getUserDAO() {
-            return new UserDaoHibernateImpl(sessionFactory.openSession());
+
+            try {
+                return new UserDaoHibernateImpl(sessionFactory.openSession());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 

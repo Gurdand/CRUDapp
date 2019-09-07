@@ -23,6 +23,7 @@ public class DBHelper {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                return null;
             }
         }
 
@@ -32,7 +33,14 @@ public class DBHelper {
 
     public Configuration getConfiguration() {
         if (configuration == null) {
-            configuration = new Configuration().configure();
+
+            try {
+
+                configuration = new Configuration().configure();
+
+            } catch (Exception e) {
+                return null;
+            }
         }
         return configuration;
     }

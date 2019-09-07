@@ -1,7 +1,7 @@
-# CRUDapp
-Написать CRUD приложение
+# CRUD + JDBC + Hibernate
 
-    Использовать Tomcat,maven, JSP, JSTL, сервлетыты, JDBC
-    Должен быть класс User  с произвольными полями (id, name и т.п.)
-    В приложении должна быть страница на которую выводятся все юзеры с возможностью добавлять, удалять и изменять юзера
-    Конфигурация сервлетов через аннотации
+   1) прочитать про паттерны Синглтон и Абстрактная фабриика
+   2) у UserDao две реализации UserDaoJDBCimpl и UserDaoHibernateImpl
+   3) UserDaoFactory - абстрактная фабрика которая возвращает реализацию дао     на основе файла property
+   4) DBHelper - синглтон, у него есть два метода getConnection и getConfiguration которые отдают Connection для jdbc dao и Configuration для hibernatedao соотвтетственно
+   5) Сервис - синглтон
