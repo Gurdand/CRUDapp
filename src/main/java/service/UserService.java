@@ -4,7 +4,7 @@ import dao.UserDaoFactory;
 import model.User;
 import java.util.List;
 
-public class UserService {
+public class UserService implements Service {
 
     private static UserDaoFactory factory = UserDaoFactory.getFactory();
 
