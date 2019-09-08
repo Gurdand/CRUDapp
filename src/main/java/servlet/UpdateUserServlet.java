@@ -13,6 +13,8 @@ import java.io.IOException;
 @WebServlet("/users/update")
 public class UpdateUserServlet extends HttpServlet {
 
+    private UserService userService = new UserService();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -23,7 +25,7 @@ public class UpdateUserServlet extends HttpServlet {
                     req.getParameter("name"),
                     Integer.parseInt(req.getParameter("age")));
 
-            if (new UserService().updateUser(user)) {
+            if (userService.updateUser(user)) {
                 req.setAttribute("message", "Данные обновлены!");
                 resp.setStatus(200);
             }

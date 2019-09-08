@@ -9,15 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @WebServlet("/users/create")
 public class CreateUserServlet extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
-    }
+    private UserService userService = new UserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,7 +27,7 @@ public class CreateUserServlet extends HttpServlet {
             user.setName(req.getParameter("name"));
             user.setAge(Integer.parseInt(req.getParameter("age")));
 
-            if (new UserService().createUser(user)) {
+            if (userService.createUser(user)) {
                 message = "Новый юзер " + user.getName() + " добавлен!";
 
                 resp.setStatus(200);

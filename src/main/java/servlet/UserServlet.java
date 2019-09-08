@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/users/*")
 public class UserServlet extends HttpServlet {
+
+    private UserService userService = new UserService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class UserServlet extends HttpServlet {
         req.setAttribute("message", req.getAttribute("message"));
 
         try {
-            List<User> users = new UserService().getAllUsers();
+            List<User> users = userService.getAllUsers();
 
             if (users == null) {
                 throw new IllegalArgumentException("Ошибка! List<User> users = null");

@@ -12,12 +12,14 @@ import java.io.IOException;
 @WebServlet("/users/delete")
 public class DeleteUserServlet extends HttpServlet {
 
+    private UserService userService = new UserService();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=utf-8");
         resp.setCharacterEncoding("UTF-8");
 
-        if (new UserService().deleteUserById(Integer.parseInt(req.getParameter("id")))) {
+        if (userService.deleteUserById(Integer.parseInt(req.getParameter("id")))) {
             req.setAttribute("message", "Запись удалена!");
             resp.setStatus(200);
         } else {
