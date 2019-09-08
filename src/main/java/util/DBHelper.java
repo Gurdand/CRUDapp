@@ -1,5 +1,6 @@
 package util;
 
+import model.User;
 import org.hibernate.cfg.Configuration;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -16,10 +17,10 @@ public class DBHelper {
     public Connection getConnection() {
         if (connection == null) {
             try {
-                DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance());
+                DriverManager.registerDriver((Driver) Class.forName(properties.getAppProperty("driver")).getDeclaredConstructor().newInstance());
 
-                connection = DriverManager.getConnection(properties.getUrl(),
-                        properties.getLogin(), properties.getPassword());
+                connection = DriverManager.getConnection(properties.getAppProperty("url"),
+                        properties.getAppProperty("login"), properties.getAppProperty("password"));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -35,10 +36,20 @@ public class DBHelper {
         if (configuration == null) {
 
             try {
+                configuration = new Configuration();
 
-                configuration = new Configuration().configure();
+                configuration.addAnnotatedClass(User.class);
+
+                configuration.setProperty("hibernate.connection.url", properties.getAppProperty("url"));
+                configuration.setProperty("hibernate.connection.driver_class", properties.getAppProperty("driver"));
+                configuration.setProperty("hibernate.connection.username", properties.getAppProperty("login"));
+                configuration.setProperty("hibernate.connection.password", properties.getAppProperty("password"));
+                configuration.setProperty("hibernate.show_sql", properties.getAppProperty("showSQL"));
+                configuration.setProperty("hibernate.hbm2ddl.auto", properties.getAppProperty("hbm2ddl"));
+                configuration.setProperty("hibernate.dialect", properties.getAppProperty("dialect"));
 
             } catch (Exception e) {
+                e.printStackTrace();
                 return null;
             }
         }

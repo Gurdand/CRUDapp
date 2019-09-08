@@ -10,7 +10,7 @@ public abstract class UserDaoFactory {
 
     public static UserDaoFactory getFactory() {
 
-        return (new DBProperties().isUseHibernate()) ? new HibernateUserDaoFactory() : new JdbcUserDaoFactory();
+        return (new DBProperties().getAppProperty("useHibernate").contains("true")) ? new HibernateUserDaoFactory() : new JdbcUserDaoFactory();
     }
 
 

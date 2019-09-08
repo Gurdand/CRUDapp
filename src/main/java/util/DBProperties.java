@@ -10,13 +10,10 @@ import java.util.Properties;
 
 public class DBProperties {
 
-    private String url;
-    private String login;
-    private String password;
-    private boolean useHibernate;
+    private Properties properties = new Properties();
 
     public DBProperties() {
-        Properties properties = new Properties();
+
         URL res = DBHelper.class.getClassLoader().getResource("db.properties");
 
         assert res != null;
@@ -24,29 +21,13 @@ public class DBProperties {
         try (InputStream in = Files.newInputStream(Paths.get(res.toURI()))) {
             properties.load(in);
 
-            url = properties.getProperty("url");
-            login = properties.getProperty("login");
-            password = properties.getProperty("password");
-            useHibernate = properties.getProperty("useHibernate").contains("true");
-
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    public String getUrl() {
-        return url;
+    public String getAppProperty(String key) {
+        return properties.getProperty(key);
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public boolean isUseHibernate() {
-        return useHibernate;
-    }
 }
