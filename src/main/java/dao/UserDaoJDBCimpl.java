@@ -20,8 +20,15 @@ public class UserDaoJDBCimpl implements UserDAO {
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, user.getName());
         statement.setInt(2, user.getAge());
-        statement.execute();
-        statement.close();
+        try {
+            statement.execute();
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            statement.cancel();
+            statement.close();
+            throw new SQLException("Ошибка транзакции!");
+        }
     }
 
     @Override
@@ -52,14 +59,28 @@ public class UserDaoJDBCimpl implements UserDAO {
         statement.setNString(1, user.getName());
         statement.setInt(2, user.getAge());
         statement.setInt(3, user.getId());
-        statement.executeUpdate();
-        statement.close();
+        try {
+            statement.executeUpdate();
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            statement.cancel();
+            statement.close();
+            throw new SQLException("Ошибка транзакции!");
+        }
     }
 
     @Override
     public void deleteUser(int id) throws SQLException {
         Statement statement = connection.createStatement();
-        statement.execute("DELETE FROM user_test.users WHERE id = '" + id + "'");
-        statement.close();
+        try {
+            statement.execute("DELETE FROM user_test.users WHERE id = '" + id + "'");
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            statement.cancel();
+            statement.close();
+            throw new SQLException("Ошибка транзакции!");
+        }
     }
 }

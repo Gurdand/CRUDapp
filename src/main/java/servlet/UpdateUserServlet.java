@@ -28,9 +28,9 @@ public class UpdateUserServlet extends HttpServlet {
             if (userService.updateUser(user)) {
                 req.setAttribute("message", "Данные обновлены!");
                 resp.setStatus(200);
+            } else {
+                req.setAttribute("message", "Ошибка! Невозможно обновить данные!");
             }
-
-            req.setAttribute("message", "Ошибка! Невозможно обновить данные!");
 
         } catch (Exception e) {
             e.printStackTrace();

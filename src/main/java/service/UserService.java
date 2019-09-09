@@ -1,16 +1,23 @@
 package service;
 
+import dao.UserDAO;
 import dao.UserDaoFactory;
 import model.User;
 import java.util.List;
 
 public class UserService implements Service {
 
-    private static UserDaoFactory factory = UserDaoFactory.getFactory();
+    private static final UserDaoFactory userDaoFactory = UserDaoFactory.getInstance();
+
+    //private UserDAO userDAO;
+
+//    public UserService() {
+//            userDAO = userDaoFactory.getUserDAO();
+//    }
 
     public boolean createUser(User user) {
         try {
-            factory.getUserDAO().createUser(user);
+            userDaoFactory.getUserDAO().createUser(user);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -20,7 +27,7 @@ public class UserService implements Service {
 
     public List<User> getAllUsers() {
         try {
-            return factory.getUserDAO().getAllUsers();
+            return userDaoFactory.getUserDAO().getAllUsers();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -29,7 +36,7 @@ public class UserService implements Service {
 
     public boolean deleteUserById(int id) {
         try {
-            factory.getUserDAO().deleteUser(id);
+            userDaoFactory.getUserDAO().deleteUser(id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,7 +46,7 @@ public class UserService implements Service {
 
     public boolean updateUser(User user) {
         try {
-            factory.getUserDAO().updateUser(user);
+            userDaoFactory.getUserDAO().updateUser(user);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

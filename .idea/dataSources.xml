@@ -15,13 +15,11 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="hibernate.cfg.xml/Hibernate" uuid="bcfe1df2-1db7-47c9-9254-cbf9ddb9ac23">
+    <data-source source="LOCAL" name="Hibernate" uuid="bcfe1df2-1db7-47c9-9254-cbf9ddb9ac23">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
-      <remarks>Hibernate
-
-D:/Java Project/CRUDapp/src/main/resources/hibernate.cfg.xml</remarks>
+      <remarks>Hibernate</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/user_test?serverTimezone=Europe/Moscow&amp;allowPublicKeyRetrieval=true&amp;useSSL=false</jdbc-url>
       <driver-properties>
