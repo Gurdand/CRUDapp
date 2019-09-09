@@ -13,7 +13,7 @@ import java.io.IOException;
 @WebServlet("/users/update")
 public class UpdateUserServlet extends HttpServlet {
 
-    private UserService userService = new UserService();
+    private UserService userService = UserService.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
