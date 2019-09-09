@@ -7,17 +7,11 @@ import java.util.List;
 
 public class UserService implements Service {
 
-    private static final UserDaoFactory userDaoFactory = UserDaoFactory.getInstance();
-
-    //private UserDAO userDAO;
-
-//    public UserService() {
-//            userDAO = userDaoFactory.getUserDAO();
-//    }
+    private static final UserDAO USER_DAO = UserDaoFactory.getUserDAO();
 
     public boolean createUser(User user) {
         try {
-            userDaoFactory.getUserDAO().createUser(user);
+            USER_DAO.createUser(user);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +21,7 @@ public class UserService implements Service {
 
     public List<User> getAllUsers() {
         try {
-            return userDaoFactory.getUserDAO().getAllUsers();
+            return USER_DAO.getAllUsers();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -36,7 +30,7 @@ public class UserService implements Service {
 
     public boolean deleteUserById(int id) {
         try {
-            userDaoFactory.getUserDAO().deleteUser(id);
+            USER_DAO.deleteUser(id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,7 +40,7 @@ public class UserService implements Service {
 
     public boolean updateUser(User user) {
         try {
-            userDaoFactory.getUserDAO().updateUser(user);
+            USER_DAO.updateUser(user);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
