@@ -30,16 +30,19 @@ public class UserDaoHibernateImpl implements UserDAO {
 
     @Override
     public void createUser(User user) {
-        Session session = getSession();
-        Transaction transaction = session.beginTransaction();
-        try{
+
+        Transaction transaction = null;
+
+        try (Session session = getSession()) {
+            transaction = session.beginTransaction();
             session.save(user);
             transaction.commit();
-            session.close();
+
         } catch (Exception e) {
             e.printStackTrace();
-            transaction.rollback();
-            session.close();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new TransactionException("Ошибка транзакции!");
         }
     }
@@ -48,8 +51,9 @@ public class UserDaoHibernateImpl implements UserDAO {
     //language=hql
     public List<User> getAllUsers() {
         Session session = getSession();
-        Transaction transaction = session.beginTransaction();
+        Transaction transaction = null;
         try {
+            transaction = session.beginTransaction();
             List<User> users = session.createQuery("FROM User").list();
             transaction.commit();
             session.close();
@@ -64,16 +68,20 @@ public class UserDaoHibernateImpl implements UserDAO {
 
     @Override
     public void updateUser(User user) {
-        Session session = getSession();
-        Transaction transaction = session.beginTransaction();
-        try {
+
+        Transaction transaction = null;
+
+        try (Session session = getSession()) {
+
+            transaction = session.beginTransaction();
             session.update(user);
             transaction.commit();
-            session.close();
+
         } catch (Exception e) {
             e.printStackTrace();
-            transaction.rollback();
-            session.close();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new TransactionException("Ошибка транзакции!");
         }
     }
@@ -81,17 +89,21 @@ public class UserDaoHibernateImpl implements UserDAO {
     @Override
     //language=hql
     public void deleteUser(int id) {
-        Session session = getSession();
-        Transaction transaction = session.beginTransaction();
-        try {
+
+        Transaction transaction = null;
+
+        try (Session session = getSession()) {
+
+            transaction = session.beginTransaction();
             session.createQuery("DELETE FROM User WHERE id = :id")
                     .setParameter("id", id).executeUpdate();
             transaction.commit();
-            session.close();
+
         } catch (Exception e) {
             e.printStackTrace();
-            transaction.rollback();
-            session.close();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new TransactionException("Ошибка транзакции!");
         }
     }
