@@ -20,23 +20,26 @@ public class UpdateUserServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
+        String message = "Ошибка! Невозможно обновить данные!";
+
         try {
             User user = new User(Integer.parseInt(req.getParameter("id")),
                     req.getParameter("name"),
                     Integer.parseInt(req.getParameter("age")));
 
             if (userService.updateUser(user)) {
-                req.setAttribute("message", "Данные обновлены!");
+                message = "Данные обновлены!";
                 resp.setStatus(200);
             } else {
-                req.setAttribute("message", "Ошибка! Невозможно обновить данные!");
+                resp.setStatus(400);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("message", "Ошибка! Невозможно обновить данные!");
             resp.setStatus(400);
         }
+
+        req.setAttribute("message", message);
 
         getServletContext().getRequestDispatcher("/users").forward(req,resp);
 

@@ -32,19 +32,16 @@ public class UserServlet extends HttpServlet {
         try {
             List<User> users = userService.getAllUsers();
 
-            if (users == null) {
-                throw new IllegalArgumentException("Ошибка! List<User> users = null");
-            }
-
             req.setAttribute("users", users);
             resp.setStatus(200);
 
         } catch (Exception e) {
+            e.printStackTrace();
             req.setAttribute("message", "Упс! Что то пошло не так! =(");
             resp.setStatus(400);
         }
 
-        getServletContext().getRequestDispatcher("/WEB-INF/templates/users.jsp").forward(req,resp);
+        getServletContext().getRequestDispatcher("/users.jsp").forward(req,resp);
 
     }
 }

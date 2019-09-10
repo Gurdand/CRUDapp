@@ -17,7 +17,11 @@ public class UserService implements Service {
 
     public static UserService getInstance() {
         if (userService == null) {
-            userService = new UserService(UserDaoFactory.getUserDAO());
+            try {
+                userService = new UserService(UserDaoFactory.getUserDAO());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return userService;
     }

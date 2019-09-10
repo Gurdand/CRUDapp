@@ -1,5 +1,6 @@
 package util;
 
+import exception.ApplicationException;
 import model.User;
 import org.hibernate.cfg.Configuration;
 import java.sql.Connection;
@@ -8,13 +9,13 @@ import java.sql.DriverManager;
 
 public class DBHelper {
 
-    private DBProperties properties = new DBProperties();
+    private static DBProperties properties = new DBProperties();
 
     private static Connection connection;
 
     private static Configuration configuration;
 
-    public Connection getConnection() {
+    public Connection getConnection() throws ApplicationException {
         if (connection == null) {
             try {
                 DriverManager.registerDriver((Driver) Class.forName(properties.getAppProperty("driver")).getDeclaredConstructor().newInstance());
@@ -24,7 +25,7 @@ public class DBHelper {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+                throw new ApplicationException("Ошибка создания connection!");
             }
         }
 
@@ -32,7 +33,7 @@ public class DBHelper {
     }
 
 
-    public Configuration getConfiguration() {
+    public Configuration getConfiguration() throws ApplicationException {
         if (configuration == null) {
 
             try {
@@ -50,7 +51,7 @@ public class DBHelper {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+                throw new ApplicationException("Ошибка создания конфигурации!");
             }
         }
         return configuration;

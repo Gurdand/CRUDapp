@@ -1,5 +1,6 @@
 package dao;
 
+import exception.ApplicationException;
 import model.User;
 
 import java.sql.*;
@@ -15,27 +16,29 @@ public class UserDaoJDBCimpl implements UserDAO {
     }
 
     @Override
-    public void createUser(User user) throws SQLException {
+    public void createUser(User user) throws SQLException, ApplicationException {
 
         String sql = "INSERT INTO user_test.users (name, age) Values (?, ?)";
 
         connection.setAutoCommit(false);
 
-        try (PreparedStatement statement = connection.prepareStatement(sql);) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getName());
             statement.setInt(2, user.getAge());
-            statement.execute();
+            if (statement.executeUpdate() == 0) {
+                throw new IllegalArgumentException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             connection.rollback();
-            throw new SQLException("Ошибка транзакции!");
+            throw new ApplicationException("Ошибка танзакции!");
         }
 
         connection.commit();
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws ApplicationException {
         try (Statement statement = connection.createStatement()) {
             statement.execute("SELECT * FROM user_test.users");
             ResultSet resultSet = statement.getResultSet();
@@ -49,12 +52,12 @@ public class UserDaoJDBCimpl implements UserDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new ApplicationException("Ошибка получения данных!");
         }
     }
 
     @Override
-    public void updateUser(User user) throws SQLException {
+    public void updateUser(User user) throws SQLException, ApplicationException {
 
         connection.setAutoCommit(false);
 
@@ -63,28 +66,34 @@ public class UserDaoJDBCimpl implements UserDAO {
             statement.setString(1, user.getName());
             statement.setInt(2, user.getAge());
             statement.setInt(3, user.getId());
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                throw new IllegalArgumentException();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
             connection.rollback();
-            throw new SQLException("Ошибка транзакции!");
+            throw new ApplicationException("Ошибка транзакции!");
         }
 
         connection.commit();
     }
 
     @Override
-    public void deleteUser(int id) throws SQLException {
+    public void deleteUser(int id) throws SQLException, ApplicationException {
+
+        String sql = "DELETE FROM user_test.users WHERE id = '" + id + "'";
 
         connection.setAutoCommit(false);
 
         try (Statement statement = connection.createStatement()) {
-            statement.execute("DELETE FROM user_test.users WHERE id = '" + id + "'");
+            if (statement.executeUpdate(sql) == 0) {
+                throw new IllegalArgumentException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             connection.rollback();
-            throw new SQLException("Ошибка транзакции!");
+            throw new ApplicationException("Ошибка транзакции!");
         }
 
         connection.commit();

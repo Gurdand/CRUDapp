@@ -1,11 +1,8 @@
 package dao;
 
-
+import exception.ApplicationException;
 import model.User;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.TransactionException;
+import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 
 import java.util.List;
@@ -14,22 +11,27 @@ public class UserDaoHibernateImpl implements UserDAO {
 
     private SessionFactory sessionFactory;
 
-    public UserDaoHibernateImpl(Configuration configuration) {
+    public UserDaoHibernateImpl(Configuration configuration) throws ApplicationException {
         try {
             sessionFactory = configuration.buildSessionFactory();
         } catch (Exception e) {
             e.printStackTrace();
-            sessionFactory = null;
+            throw new ApplicationException("Ошибка создания sessionFactory!");
         }
 
     }
 
-    private Session getSession() {
-        return sessionFactory.openSession();
+    private Session getSession() throws ApplicationException {
+        try {
+            return sessionFactory.openSession();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApplicationException("Ошибка открытия сессии!");
+        }
     }
 
     @Override
-    public void createUser(User user) {
+    public void createUser(User user) throws ApplicationException {
 
         Transaction transaction = null;
 
@@ -43,31 +45,29 @@ public class UserDaoHibernateImpl implements UserDAO {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new TransactionException("Ошибка транзакции!");
+            throw new ApplicationException("Ошибка транзакции!");
         }
     }
 
     @Override
     //language=hql
-    public List<User> getAllUsers() {
-        Session session = getSession();
-        Transaction transaction = null;
-        try {
-            transaction = session.beginTransaction();
+    public List<User> getAllUsers() throws ApplicationException {
+        try (Session session = getSession()) {
+
+            Transaction transaction = session.beginTransaction();
             List<User> users = session.createQuery("FROM User").list();
             transaction.commit();
-            session.close();
             return users;
+
         } catch (Exception e) {
             e.printStackTrace();
-            session.close();
-            return null;
+            throw new ApplicationException("Ошибка получения данных!");
         }
 
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(User user) throws ApplicationException {
 
         Transaction transaction = null;
 
@@ -82,13 +82,13 @@ public class UserDaoHibernateImpl implements UserDAO {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new TransactionException("Ошибка транзакции!");
+            throw new ApplicationException("Ошибка транзакции!");
         }
     }
 
     @Override
     //language=hql
-    public void deleteUser(int id) {
+    public void deleteUser(int id) throws ApplicationException {
 
         Transaction transaction = null;
 
@@ -104,7 +104,7 @@ public class UserDaoHibernateImpl implements UserDAO {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new TransactionException("Ошибка транзакции!");
+            throw new ApplicationException("Ошибка транзакции!");
         }
     }
 

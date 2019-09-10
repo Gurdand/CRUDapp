@@ -19,13 +19,22 @@ public class DeleteUserServlet extends HttpServlet {
         resp.setContentType("text/html;charset=utf-8");
         resp.setCharacterEncoding("UTF-8");
 
-        if (userService.deleteUserById(Integer.parseInt(req.getParameter("id")))) {
-            req.setAttribute("message", "Запись удалена!");
-            resp.setStatus(200);
-        } else {
-            req.setAttribute("message", "Ошибка!");
+        String message = "Ошибка удаления записи!";
+
+        try {
+            if (userService.deleteUserById(Integer.parseInt(req.getParameter("id")))) {
+                message = "Запись удалена!";
+                resp.setStatus(200);
+            } else {
+                resp.setStatus(400);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
             resp.setStatus(400);
         }
+
+        req.setAttribute("message", message);
 
         getServletContext().getRequestDispatcher("/users").forward(req,resp);
 

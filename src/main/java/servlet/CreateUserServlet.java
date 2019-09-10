@@ -29,12 +29,11 @@ public class CreateUserServlet extends HttpServlet {
 
             if (userService.createUser(user)) {
                 message = "Новый юзер " + user.getName() + " добавлен!";
-
                 resp.setStatus(200);
             }
 
         } catch (Exception e) {
-            message = "Ошибка! Юзер не добавлен!";
+            e.printStackTrace();
             resp.setStatus(400);
         }
 
